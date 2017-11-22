@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pprint import pprint
 
 sizeOfMap2D = [100, 50]
-percentOfObstacle = 0.9  # 30% - 60%, random
+percentOfObstacle = 0.9#random.randrange(70, 90)/100.0  # 30% - 60%, random
 
 
 # Generate 2D matrix of size x * y
@@ -199,3 +199,6 @@ def plotMap(map2d_, path_=None, title_=''):
 ##   -3 - goal point
 ##   positive_number - one of the values described in lab2 description (heuristic cost, travel cost, cell total cost,...)
 # plotMap(mymap,[[1,1],[1,8]])
+
+# ret=generateMap2d_obstacle([70, 70])
+# plotMap(ret[0])
