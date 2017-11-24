@@ -10,7 +10,7 @@ def find_path_bfs(world_nparray):
     :param world_nparray:
     :type world_nparray: ndarray
     :return:
-    :rtype: str
+    :rtype: list
     """
     world_ndarray = np.copy(world_nparray)
     start = tuple(np.argwhere(world_ndarray == -2)[0])
@@ -25,6 +25,7 @@ def find_path_bfs(world_nparray):
     visited = set()
     graph = get_neighbors(world_tuple)
     route_str = ""
+    cost = 0
 
     while queue:
         path, current = queue.popleft()
@@ -34,16 +35,21 @@ def find_path_bfs(world_nparray):
         if current in visited:
             continue
         visited.add(current)
+        cost += 1
         for direction, neighbour in graph[current].iteritems():
             queue.append((path + direction, neighbour))
+            world_ndarray[neighbour] = cost
 
-    print route_str
-    print "Visited nodes: ", len(visited)
+    # print route_str
+    print "Expanded nodes(BFS): ", len(visited)
     route_coord = [start]
     for p in route_str:
         route_coord.append(graph[route_coord[-1]][p])
 
-    return route_coord
+    world_ndarray[start] = -2
+    world_ndarray[goal] = -3
+
+    return route_coord, world_ndarray
 
 
 def find_path_dfs(world_nparray):
@@ -51,7 +57,7 @@ def find_path_dfs(world_nparray):
     :param world_nparray:
     :type world_nparray: ndarray
     :return:
-    :rtype: str
+    :rtype: list
     """
     world_ndarray = np.copy(world_nparray)
     start = tuple(np.argwhere(world_ndarray == -2)[0])
@@ -66,6 +72,7 @@ def find_path_dfs(world_nparray):
     visited = set()
     graph = get_neighbors(world_tuple)
     route_str = ""
+    cost = 0
 
     while stack:
         path, current = stack.pop()
@@ -75,16 +82,21 @@ def find_path_dfs(world_nparray):
         if current in visited:
             continue
         visited.add(current)
+        cost += 1
         for direction, neighbour in graph[current].iteritems():
             stack.append((path + direction, neighbour))
+            world_ndarray[neighbour] = cost
 
-    print route_str
-    print "Visited nodes: ", len(visited)
+    # print route_str
+    print "Expanded nodes(DFS): ", len(visited)
     route_coord = [start]
     for p in route_str:
         route_coord.append(graph[route_coord[-1]][p])
 
-    return route_coord
+    world_ndarray[start] = -2
+    world_ndarray[goal] = -3
+
+    return route_coord, world_ndarray
 
 
 def find_path_astar(world_nparray):
@@ -106,19 +118,23 @@ def find_path_astar(world_nparray):
     while pr_queue:
         _, cost, path, current = heappop(pr_queue)
         if current == goal:
-            route_str=path
+            route_str = path
             break
         if current in visited:
             continue
         visited.add(current)
         for direction, neighbour in graph[current].iteritems():
-            heappush(pr_queue, (cost + h_manhattan(neighbour, goal), cost + 1,
-                                path + direction, neighbour))
+            heappush(pr_queue, (cost + h_manhattan(neighbour, goal), cost + 1, path + direction, neighbour))
+            cost += 1
+            world_ndarray[neighbour] = cost
 
-    print route_str
-    print "Visited nodes(A*): ", len(visited)
+    # print route_str
+    print "Expanded nodes(A*): ", len(visited)
     route_coord = [start]
     for p in route_str:
         route_coord.append(graph[route_coord[-1]][p])
 
-    return route_coord
+    world_ndarray[start] = -2
+    world_ndarray[goal] = -3
+
+    return route_coord, world_ndarray

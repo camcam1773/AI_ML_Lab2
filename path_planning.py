@@ -145,7 +145,7 @@ def plotMap(map2d_, path_=None, title_=''):
     locEnd = np.where(map2d_ == -3)
 
     colorsMap2d[locStart[0][0]][locStart[1][0]] = [.0, .0, .0, 1.0]  # black
-    colorsMap2d[locEnd[0][0]][locEnd[1][0]] = [.0, .0, .0, .5]  # gray
+    colorsMap2d[locEnd[0][0]][locEnd[1][0]] = [1.0, 1.0, .0, 1.0]  # gray
 
     # Assign RGB Val for obstacle
     locObstacle = np.where(map2d_ == -1)
@@ -161,8 +161,9 @@ def plotMap(map2d_, path_=None, title_=''):
     locExpand = np.where(map2d_ > 0)
 
     for iposExpand in range(len(locExpand[0])):
-        colorsMap2d[locExpand[0][iposExpand]][locExpand[1][iposExpand]] = colors[
-            map2d_[locExpand[0][iposExpand]][locExpand[1][iposExpand]] - 1]
+        a=locExpand[0][iposExpand]
+        b=locExpand[1][iposExpand]
+        colorsMap2d[a][b] = colors[int(map2d_[a][b]) - 1]
 
     for irow in range(len(colorsMap2d)):
         for icol in range(len(colorsMap2d[irow])):
