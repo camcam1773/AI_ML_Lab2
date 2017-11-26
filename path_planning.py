@@ -3,14 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pprint import pprint
 
-sizeOfMap2D = [100, 50]
-percentOfObstacle = 0.9#random.randrange(70, 90)/100.0  # 30% - 60%, random
+# sizeOfMap2D = [100, 50]
+# percentOfObstacle = 0.9  # random.randrange(70, 90)/100.0  # 30% - 60%, random
 
 
 # Generate 2D matrix of size x * y
 # starting Point and Ending Point
 
-def generateMap2d(size_):
+def generateMap2d(size_, percentOfObstacle = 0.9):
     # Generates a random 2d map of size size_. You can choose your desired size but whatever solution you come up with
     # has to work independently of map size
 
@@ -36,11 +36,11 @@ def generateMap2d(size_):
 
 
 # Generate specific map
-def generateMap2d_obstacle(size_):
+def generateMap2d_obstacle(size_, percentOfObstacle = 0.9):
     # Generates a special map with the middle blocked and passing from left to right being possible at the top or bottom
     # part of the map. If for some reason the map fails to generate like that rerun it as it is not foolproof
     size_x, size_y = size_[0], size_[1]
-    map2d = generateMap2d(size_)
+    map2d = generateMap2d(size_, percentOfObstacle)
 
     map2d[map2d == -2] = 0
     map2d[map2d == -3] = 0
@@ -116,20 +116,9 @@ def generateMap2d_swamp(size_):
     return map2d, [H * scale, [[int(x), int(y)] for [x, y] in center]]
 
 
-def plotMap(map2d_, path_=None, title_=''):
-    # Plots a map as described in lab2 description containing integer numbers. Each number has a specific meaning. You can check
-    # the example provided at the end of the file for more information
-    '''
-    for irow in range(len(map2d_)):
-        for icol in range(len(map2d_[irow])):
-            #print(map2d_[irow][icol], colorsMap2d[irow][icol])
-            if map2d_[irow][icol] < 0 and map2d_[irow][icol]>=-1:
-                #colorsMap2d[irow][icol] = [1.0, 0.0, 0.0, 1.0]
-                map2d_[irow][icol] = -1.
-    '''
-
-    if path_ is None:
-        path_ = [[], []]
+def generate_colormap(map2d_):
+    # Plots a map as described in lab2 description containing integer numbers. Each number has a specific meaning.
+    # You can check the example provided at the end of the file for more information
 
     import matplotlib.cm as cm
     plt.interactive(False)
@@ -161,9 +150,9 @@ def plotMap(map2d_, path_=None, title_=''):
     locExpand = np.where(map2d_ > 0)
 
     for iposExpand in range(len(locExpand[0])):
-        a=locExpand[0][iposExpand]
-        b=locExpand[1][iposExpand]
-        colorsMap2d[a][b] = colors[int(map2d_[a][b]) - 1]
+        a = locExpand[0][iposExpand]
+        b = locExpand[1][iposExpand]
+        colorsMap2d[a][b] = colors[int(round(map2d_[a][b])) - 1]
 
     for irow in range(len(colorsMap2d)):
         for icol in range(len(colorsMap2d[irow])):
@@ -171,35 +160,22 @@ def plotMap(map2d_, path_=None, title_=''):
             if colorsMap2d[irow][icol] == []:
                 colorsMap2d[irow][icol] = [1.0, 0.0, 0.0, 1.0]
                 # colorsMap2d[irow][icol] = [1.0, 1.0, 1.0, 1.0]
+    return colorsMap2d
 
-    plt.figure()
-    plt.title(title_)
-    plt.imshow(colorsMap2d, interpolation='nearest')
-    plt.colorbar()
-    plt.plot(path_[:][0], path_[:][1], color='magenta', linewidth=2.5)
-    plt.ylim(-1, map2d_.shape[0])
-    plt.xlim(-1, map2d_.shape[1])
+
+def multi_plot(plot_list):
+    for c in plot_list:
+        plt.figure()
+        if len(c) == 1:
+            c.append([[], []])
+        elif len(c) == 2:
+            c.append('')
+        plt.title(c[2])
+        plt.imshow(c[0], interpolation='nearest')
+        plt.colorbar()
+        path_ = c[1]
+        plt.plot(path_[:][0], path_[:][1], color='magenta', linewidth=2.5)
+        plt.ylim(-1, len(c[0][0]))
+        plt.xlim(-1, len(c[0][1]))
     plt.draw()
     plt.show()
-
-## Example
-## Map description
-##   0 - Free cell
-##   -1 - Obstacle
-##   -2 - Start point
-##   -3 - Goal point
-##
-# mymap = generateMap2d([10, 10])
-# pprint(mymap)
-# print mymap[0][:]
-## Solve using your implemented A* algorithm
-##solved_map description
-##   0 - unexpanded cell
-##   -1 - obstacle
-##   -2 - start point
-##   -3 - goal point
-##   positive_number - one of the values described in lab2 description (heuristic cost, travel cost, cell total cost,...)
-# plotMap(mymap,[[1,1],[1,8]])
-
-# ret=generateMap2d_obstacle([70, 70])
-# plotMap(ret[0])

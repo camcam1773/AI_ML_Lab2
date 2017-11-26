@@ -20,6 +20,7 @@ def get_neighbors(world):
             graph[(row, col + 1)]["W"] = (row, col)
     return graph
 
+
 def coord_to_x_y(coordinates):
     coord_x_y = [[], []]
     for i in coordinates:
