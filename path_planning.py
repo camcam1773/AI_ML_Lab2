@@ -1,7 +1,6 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from pprint import pprint
 
 # sizeOfMap2D = [100, 50]
 # percentOfObstacle = 0.9  # random.randrange(70, 90)/100.0  # 30% - 60%, random
@@ -72,7 +71,7 @@ def generateMap2d_obstacle(size_, percentOfObstacle = 0.9):
 
     map2d[goalp[1], goalp[0]] = -3
     # return map2d, [startp[1], startp[0]], [goalp[1], goalp[0]], [ytop, ybot]
-    return map2d, [ytop, ybot, minx]
+    return map2d, (ytop, ybot, minx)
 
 
 def generateMap2d_swamp(size_):
@@ -117,8 +116,13 @@ def generateMap2d_swamp(size_):
 
 
 def generate_colormap(map2d_):
-    # Plots a map as described in lab2 description containing integer numbers. Each number has a specific meaning.
-    # You can check the example provided at the end of the file for more information
+    """
+    Generates the color map based on the provided path costs
+    :param map2d_:
+    :type map2d_: ndarray
+    :return: a map as described in lab2 description containing integer numbers. Each number has a specific meaning.
+    :rtype: list
+    """
 
     import matplotlib.cm as cm
     plt.interactive(False)
@@ -164,6 +168,13 @@ def generate_colormap(map2d_):
 
 
 def multi_plot(plot_list):
+    """
+    Plots the paths found by provided by the search algoritms in seperates windows
+    :param plot_list: A list that contains the colormap, coordinates
+    :type plot_list: list
+    :return: None
+    :rtype: None
+    """
     for c in plot_list:
         plt.figure()
         if len(c) == 1:
