@@ -42,7 +42,7 @@ def find_path_bfs(world_nparray):
             queue.append((path + direction, neighbour))
             world_ndarray[neighbour] = cost
 
-    print "Expanded nodes(BFS): ", len(visited), " Path length: ", len(route_str)
+    # print "Expanded nodes(BFS): ", len(visited), " Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -51,7 +51,7 @@ def find_path_bfs(world_nparray):
     world_ndarray[start] = -2
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
 
 
 def find_path_dfs(world_nparray):
@@ -90,7 +90,7 @@ def find_path_dfs(world_nparray):
             stack.append((path + direction, neighbour))
             world_ndarray[neighbour] = cost
 
-    print "Expanded nodes(DFS): ", len(visited), " Path length: ", len(route_str)
+    # print "Expanded nodes(DFS): ", len(visited), " Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -99,7 +99,7 @@ def find_path_dfs(world_nparray):
     world_ndarray[start] = -2
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
 
 
 def find_path_random(world_nparray):
@@ -139,7 +139,7 @@ def find_path_random(world_nparray):
             world_ndarray[neighbour] = cost
         shuffle(queue)
 
-    print "Expanded nodes(Random): ", len(visited), " Path length: ", len(route_str)
+    # print "Expanded nodes(Random): ", len(visited), " Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -148,7 +148,7 @@ def find_path_random(world_nparray):
     world_ndarray[start] = -2
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
 
 
 def find_path_astar(world_nparray, heuristic_type=""):
@@ -188,7 +188,7 @@ def find_path_astar(world_nparray, heuristic_type=""):
             heappush(pr_queue, (cost + get_h(neighbour, goal, heuristic_type), cost + 1, path + direction, neighbour))
             world_ndarray[neighbour] = cost + 1
 
-    print "Expanded nodes(A*+", heuristic_type, "): ", len(visited), " Path length: ", len(route_str)
+    # print "Expanded nodes(A*+", heuristic_type, "): ", len(visited), " Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -197,7 +197,7 @@ def find_path_astar(world_nparray, heuristic_type=""):
     world_ndarray[start] = -2
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
 
 
 def find_path_best_first(world_nparray, heuristic_type=""):
@@ -237,7 +237,7 @@ def find_path_best_first(world_nparray, heuristic_type=""):
             heappush(pr_queue, (get_h(neighbour, goal, heuristic_type), cost + 1, path + direction, neighbour))
             world_ndarray[neighbour] = cost + 1
 
-    print "Expanded nodes(Best First +", heuristic_type, "): ", len(visited), "Path length: ", len(route_str)
+    # print "Expanded nodes(Best First +", heuristic_type, "): ", len(visited), "Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -246,7 +246,7 @@ def find_path_best_first(world_nparray, heuristic_type=""):
     world_ndarray[start] = -2 # Mark the start and end coordinates again
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
 
 
 def a_star_obs(obs_map):
@@ -295,7 +295,7 @@ def a_star_obs(obs_map):
             heappush(pr_queue, (cost + h_custom_i(neighbour, goal, obs_map[1]), cost + 1, path + direction, neighbour))
             world_ndarray[neighbour] = cost + 1
 
-    print "Expanded nodes(A*+Custom H): ", len(visited), " Path length: ", len(route_str)
+    # print "Expanded nodes(A*+Custom H): ", len(visited), " Path length: ", len(route_str)
     # Convert string directions to 2D(x,y) coordinates
     route_coord = [start]
     for p in route_str:
@@ -304,4 +304,4 @@ def a_star_obs(obs_map):
     world_ndarray[start] = -2 # Mark the start and end coordinates again
     world_ndarray[goal] = -3
 
-    return route_coord, world_ndarray
+    return route_coord, world_ndarray, len(visited), len(route_str)
